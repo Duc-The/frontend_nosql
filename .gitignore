@@ -1,0 +1,53 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+
+# Các thư mục thư viện và file build (rất nặng, không cần đẩy lên Git)
+node_modules
+dist
+dist-ssr
+*.local
+
+# Các file biến môi trường (chứa API key, mật khẩu - tuyệt đối không đẩy lên)
+.env
+.env.local
+.env.*.local
+
+# File log lỗi của hệ thống / npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Cấu hình cá nhân của trình soạn thảo (VS Code, WebStorm...) và hệ điều hành
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+Thumbs.db
+
+# Thư mục tạm của AI agent (nếu không muốn chia sẻ lên repo)
+.agents

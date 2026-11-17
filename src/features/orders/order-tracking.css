@@ -1,0 +1,26 @@
+.order-tracking { gap: 1rem; }
+.order-tracking-heading { display: flex; align-items: start; justify-content: space-between; flex-wrap: wrap; gap: .6rem 1rem; padding-bottom: .9rem; border-bottom: 1px solid var(--line); }
+.order-tracking-heading p { margin-top: .3rem; color: var(--muted-ink); font-size: .8rem; overflow-wrap: anywhere; }
+.order-shipment { display: flex; flex-wrap: wrap; gap: .55rem 1.5rem; padding: .75rem 1rem; border-radius: .6rem; background: #f2f5ed; }
+.order-shipment dt { font-size: .75rem; color: var(--muted-ink); }
+.order-shipment dd { font-size: .87rem; font-weight: 650; overflow-wrap: anywhere; }
+.order-timeline { --marker-size: 35px; list-style: none; display: grid; padding: .25rem 0 0; margin: 0; }
+.order-timeline li { position: relative; display: grid; grid-template-columns: var(--marker-size) minmax(0, 1fr); gap: .8rem; align-items: start; min-width: 0; padding-bottom: .8rem; }
+.order-timeline li:last-child { padding-bottom: 0; }
+.order-timeline li:not(:last-child)::before { content: ""; position: absolute; inset: var(--marker-size) auto 0 calc(var(--marker-size) / 2); width: 2px; transform: translateX(-50%); background: #e0e4da; }
+.order-timeline li[data-state="done"]::before { background: #8eb09a; }
+.order-timeline-marker { display: grid; place-items: center; width: var(--marker-size); height: var(--marker-size); border: 1px solid var(--line); border-radius: 50%; background: #f5f6f0; color: var(--muted-ink); }
+.order-timeline [data-state="done"] .order-timeline-marker { border-color: #c9ddcb; background: var(--soft-green); color: var(--green); }
+.order-timeline [data-state="current"] .order-timeline-marker { border-color: var(--green); background: var(--green); color: white; }
+.order-timeline [data-state="cancelled"] .order-timeline-marker { border-color: #f3d4ce; background: #fae7e3; color: #873c34; }
+.order-timeline-event { min-height: var(--marker-size); padding: .42rem .65rem; border-radius: .55rem; overflow-wrap: anywhere; }
+.order-timeline :is([data-state="current"], [data-state="cancelled"]) .order-timeline-event { background: var(--soft-green); }
+.order-timeline [data-state="cancelled"] .order-timeline-event { background: #fbefeb; }
+.order-timeline-label { display: flex; align-items: baseline; flex-wrap: wrap; gap: .25rem .55rem; color: var(--green-dark); font-size: .92rem; }
+.order-timeline-label small { color: var(--muted-ink); font-size: .73rem; }
+.order-timeline-event :is(time, p) { display: block; margin-top: .2rem; color: var(--muted-ink); font-size: .83rem; }
+.order-timeline [data-state="upcoming"] strong { color: var(--muted-ink); font-weight: 500; }
+@media (max-width: 450px) {
+  .order-timeline { --marker-size: 31px; }
+  .order-timeline li { gap: .45rem; }
+}
