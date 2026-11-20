@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useRef, useState } from 'react'
 import { ArrowLeft, ChevronRight } from 'lucide-react'
 import { StoreLayout } from '@/layouts/StoreLayout'
@@ -42,11 +43,11 @@ export function CartPage() {
   return <StoreLayout cartCount={count}>
     <section className="store-shell cart-page">
       <nav className="cart-breadcrumb" aria-label="Đường dẫn">
-        <a href="/">Trang chủ</a><ChevronRight size={14} aria-hidden="true" /><span aria-current="page">Giỏ hàng</span>
+        <Link to="/">Trang chủ</Link><ChevronRight size={14} aria-hidden="true" /><span aria-current="page">Giỏ hàng</span>
       </nav>
       <header className="cart-heading">
         <div><h1>Giỏ hàng</h1>{data && count > 0 && <p>{count} sản phẩm trong giỏ</p>}</div>
-        <a className="cart-continue" href="/san-pham"><ArrowLeft size={16} aria-hidden="true" /> Tiếp tục mua sắm</a>
+        <Link className="cart-continue" to="/san-pham"><ArrowLeft size={16} aria-hidden="true" /> Tiếp tục mua sắm</Link>
       </header>
       <CartPanel cart={data} customer={customer} signedIn={Boolean(session)} busy={busy} error={error || cart.error}
         onRetry={cart.error ? cart.reload : undefined} onChange={change} />

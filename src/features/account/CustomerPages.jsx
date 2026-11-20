@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { Gift, LockKeyhole, MapPin, Pencil, Plus, Ticket, Trash2, UserRound, WalletCards } from 'lucide-react'
 import { CustomerEmpty, CustomerSections, CustomerTitle, PanelTitle } from './customer-ui'
 import { useState, useRef } from 'react'
@@ -45,6 +46,7 @@ export function ProfilePage({ request, save }) {
 }
 
 function PasswordSection({ request, save }) {
+  const navigate = useNavigate()
   const action = useAction()
   return <section className="page-box"><PanelTitle title="Đổi mật khẩu" icon={LockKeyhole}><p>Bạn sẽ đăng nhập lại sau khi đổi mật khẩu.</p></PanelTitle>
     <Form fields={[field('currentPassword', 'Mật khẩu hiện tại', { type: 'password', required: true, autoComplete: 'current-password' }),
@@ -52,7 +54,7 @@ function PasswordSection({ request, save }) {
       busy={action.busy} label="Đổi mật khẩu" submit={(body) => action.run(async () => {
         await request('/auth/change-password', { method: 'POST', body })
         save(null)
-        location.assign('/dang-nhap')
+        navigate('/dang-nhap')
       })} />
     <ActionMessage action={action} />
   </section>

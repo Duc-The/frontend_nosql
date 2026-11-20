@@ -1,3 +1,4 @@
+import { useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ActionMessage, DataState, Form, Grid, PageTitle, Pager, choices, column, field, useAction, useResource } from '@/components/page-kit'
@@ -66,7 +67,7 @@ export function ProductsPage({ request }) {
       field('storageInstructions', 'Bảo quản'), field('featured', 'Nổi bật', { type: 'checkbox' }),
       number('featuredOrder', 'Thứ tự nổi bật', { required: true }), stateField]}
     columns={[column('Mã', 'productCode'), column('Tên', 'name'), column('Xuất xứ', 'originDescription'), stateColumn,
-      column('SKU và ảnh', (row) => <a className="page-link" href={'/van-hanh/san-pham/' + encodeURIComponent(row.id)}>Quản lý SKU và ảnh</a>)]} />
+      column('SKU và ảnh', (row) => <Link className="page-link" to={'/van-hanh/san-pham/' + encodeURIComponent(row.id)}>Quản lý SKU và ảnh</Link>)]} />
 }
 
 export function ProductAssetsPage({ request, id }) {
@@ -80,7 +81,7 @@ export function ProductAssetsPage({ request, id }) {
     }, 'Đã cập nhật ảnh.')
   }
   return <>
-    <a className="page-link" href="/van-hanh/san-pham">Quay lại sản phẩm</a>
+    <Link className="page-link" to="/van-hanh/san-pham">Quay lại sản phẩm</Link>
     <DataState resource={product}>{(data) => <section className="page-box">
       <h2>Ảnh · {data.name}</h2><p>ID sản phẩm: <code>{data.id}</code></p><ActionMessage action={action} />
       <Form fields={[field('file', 'Tệp ảnh', { type: 'file', required: true, accept: 'image/jpeg,image/png,image/webp' }),
@@ -120,7 +121,7 @@ const promotionPath = '/admin/promotions'
 export function PromotionsPage({ request }) {
   return <ResourcePage request={request} path={promotionPath} title="Khuyến mãi" searchable
     columns={[column('Mã', 'promotionCode'), column('Tên', 'name'), column('Phạm vi', (row) => ({ ORDER: 'Toàn đơn', PRODUCT: 'Sản phẩm', BATCH: 'Lô' })[row.target]),
-      column('Đã dùng', 'usageCount'), stateColumn, column('Chi tiết', (row) => <a className="page-link" href={'/van-hanh/khuyen-mai/' + encodeURIComponent(row.id)}>Mở</a>)]}
+      column('Đã dùng', 'usageCount'), stateColumn, column('Chi tiết', (row) => <Link className="page-link" to={'/van-hanh/khuyen-mai/' + encodeURIComponent(row.id)}>Mở</Link>)]}
   />
 }
 
@@ -130,12 +131,13 @@ export function PromotionEditor({ request, id }) {
   const path = id ? promotionPath + '/' + encodeURIComponent(id) : promotionPath
   const promotion = useResource(request, id ? path : null)
   return <><PageTitle title={id ? 'Chi tiết khuyến mãi' : 'Tạo khuyến mãi'} />
-    <a className="page-link" href="/van-hanh/khuyen-mai">Quay lại khuyến mãi</a>
+    <Link className="page-link" to="/van-hanh/khuyen-mai">Quay lại khuyến mãi</Link>
     {id ? <DataState resource={promotion}>{(data) => <PromotionForm request={request} path={path} id={id} data={data} />}</DataState>
       : <PromotionForm request={request} path={path} />}</>
 }
 
 function PromotionForm({ request, path, id, data }) {
+  const navigate = useNavigate()
   const row = data?.promotion || {}
   const [target, setTarget] = useState(row.target || 'ORDER')
   const [rules, setRules] = useState(() => ({ [row.target || 'ORDER']: data?.targets || [] }))
@@ -177,7 +179,7 @@ function PromotionForm({ request, path, id, data }) {
                   id: ruleId, minimumQuantity,
                 })),
               } })
-              location.assign('/van-hanh/khuyen-mai/' + encodeURIComponent(result.promotion.id))
+              navigate('/van-hanh/khuyen-mai/' + encodeURIComponent(result.promotion.id))
             })} />
         </section>
       </>}

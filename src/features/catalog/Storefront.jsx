@@ -1,3 +1,5 @@
+import { SearchForm } from '@/components/SearchForm'
+import { useSearchParams, Link } from 'react-router-dom'
 import { useSeo } from '@/hooks/use-seo'
 import { catalogTitle } from '@/lib/seo'
 import { ArrowRight, ChevronLeft, ChevronRight, Flame, SearchX, Sparkles, Tag, X } from 'lucide-react'
@@ -8,21 +10,7 @@ import { ProductCard } from './ProductPanel'
 import { useRequest } from '@/hooks/use-request'
 import './storefront.css'
 
-const params = new URLSearchParams(window.location.search)
-const q = params.get('q') || ''
-const category = params.get('categorySlug') || ''
-const minPrice = params.get('minPrice') || ''
-const maxPrice = params.get('maxPrice') || ''
-const featured = params.get('featured') === 'true'
 const shelfLabels = { DISCOUNTED: 'Sản phẩm giảm giá', BESTSELLING: 'Sản phẩm bán chạy' }
-const shelfFilter = Object.hasOwn(shelfLabels, params.get('shelf')) ? params.get('shelf') : ''
-const page = Math.max(1, Number.parseInt(params.get('page'), 10) || 1)
-
-function catalogLink(changes = {}) {
-  const values = { q, categorySlug: category, minPrice, maxPrice, featured: featured ? 'true' : '', shelf: shelfFilter, ...changes }
-  const query = new URLSearchParams(Object.entries(values).filter(([, value]) => value !== ''))
-  return '/san-pham' + (query.size ? '?' + query : '')
-}
 
 function flatten(categories, depth = 0) {
   return categories.flatMap((item) => [{ ...item, depth }, ...flatten(item.children || [], depth + 1)])
@@ -42,13 +30,28 @@ function HomeShelf({ id, title, description, icon, query }) {
     <header className="home-shelf-heading">
       <div className="home-shelf-label"><span className="home-shelf-icon"><Icon size={21} aria-hidden="true" /></span>
         <div><h2 id={id + '-title'}>{title}</h2>{description && <p>{description}</p>}</div></div>
-      <a href={'/san-pham?' + query}>Xem tất cả <ArrowRight size={16} aria-hidden="true" /></a>
+      <Link to={'/san-pham?' + query}>Xem tất cả <ArrowRight size={16} aria-hidden="true" /></Link>
     </header>
     <div className="product-grid">{products.data.items.map((product) => <ProductCard key={product.id} product={product} />)}</div>
   </section>
 }
 
 export function Storefront({ catalogOnly = false }) {
+  const [params] = useSearchParams()
+  const q = params.get('q') || ''
+  const category = params.get('categorySlug') || ''
+  const minPrice = params.get('minPrice') || ''
+  const maxPrice = params.get('maxPrice') || ''
+  const featured = params.get('featured') === 'true'
+  const shelfFilter = Object.hasOwn(shelfLabels, params.get('shelf')) ? params.get('shelf') : ''
+  const page = Math.max(1, Number.parseInt(params.get('page'), 10) || 1)
+
+  function catalogLink(changes = {}) {
+    const values = { q, categorySlug: category, minPrice, maxPrice, featured: featured ? 'true' : '', shelf: shelfFilter, ...changes }
+    const query = new URLSearchParams(Object.entries(values).filter(([, value]) => value !== ''))
+    return '/san-pham' + (query.size ? '?' + query : '')
+  }
+
   useSeo({
     title: catalogOnly ? (shelfLabels[shelfFilter] ? shelfLabels[shelfFilter] + ' | Mùa Xanh' : catalogTitle) : undefined,
     path: catalogOnly ? '/san-pham' : '/',
@@ -74,7 +77,7 @@ export function Storefront({ catalogOnly = false }) {
           <p className="hero-label">Cửa hàng thực phẩm organic</p>
           <h1 id="hero-title">Từ vườn xanh<br />đến bữa nhà.</h1>
           <p className="hero-intro">Rau củ, trái cây và đồ khô cho những bữa ăn bạn tự tay chuẩn bị.</p>
-          <a className="hero-link" href="/san-pham">Xem sản phẩm <ArrowRight size={18} aria-hidden="true" /></a>
+          <Link className="hero-link" to="/san-pham">Xem sản phẩm <ArrowRight size={18} aria-hidden="true" /></Link>
         </div>
         <figure className="hero-photo">
           <img src="/images/market-basket.png" width="1536" height="1024" fetchPriority="high"
@@ -88,9 +91,9 @@ export function Storefront({ catalogOnly = false }) {
         {categoryRequest.error && <div className="category-message"><p>Danh mục tạm thời chưa tải được.</p><Button variant="outline" onClick={categoryRequest.retry}>Thử lại</Button></div>}
         {!categoryRequest.loading && !categoryRequest.error && !categoryLinks.length && <p>Chưa có danh mục.</p>}
         {categoryLinks.length > 0 && <nav className="category-links" aria-label="Danh mục sản phẩm">
-          <a href="/san-pham" aria-current={!category ? 'true' : undefined}>Tất cả</a>
-          {categoryLinks.map((item) => <a href={catalogLink({ categorySlug: item.slug, q: '', minPrice: '', maxPrice: '', featured: '' })}
-            key={item.id} aria-current={category === item.slug ? 'true' : undefined}>{item.name}</a>)}
+          <Link to="/san-pham" aria-current={!category ? 'true' : undefined}>Tất cả</Link>
+          {categoryLinks.map((item) => <Link to={catalogLink({ categorySlug: item.slug, q: '', minPrice: '', maxPrice: '', featured: '' })}
+            key={item.id} aria-current={category === item.slug ? 'true' : undefined}>{item.name}</Link>)}
         </nav>}
       </section>
 
@@ -101,9 +104,9 @@ export function Storefront({ catalogOnly = false }) {
           <div>{catalogOnly ? <h1 id="catalog-title">{q ? `Kết quả cho “${q}”` : shelfLabels[shelfFilter] || activeCategory?.name || (featured ? 'Sản phẩm nổi bật' : 'Sản phẩm')}</h1>
             : <h2 id="catalog-title">Khám phá cửa hàng</h2>}
             {products.data && <p>{products.data.pagination.totalElements} sản phẩm</p>}</div>
-          {catalogOnly && (q || category || minPrice || maxPrice || featured || shelfFilter) && <a href="/san-pham" className="reset-filter"><X size={16} /> Xóa bộ lọc</a>}
+          {catalogOnly && (q || category || minPrice || maxPrice || featured || shelfFilter) && <Link to="/san-pham" className="reset-filter"><X size={16} /> Xóa bộ lọc</Link>}
         </div>
-        {catalogOnly && <form className="catalog-filters" action="/san-pham" aria-label="Lọc sản phẩm">
+        {catalogOnly && <SearchForm key={params.toString()} className="catalog-filters" action="/san-pham" aria-label="Lọc sản phẩm">
           {q && <input type="hidden" name="q" value={q} />}
           {shelfFilter && <input type="hidden" name="shelf" value={shelfFilter} />}
           <label>Danh mục
@@ -116,24 +119,24 @@ export function Storefront({ catalogOnly = false }) {
           <label>Đến<input name="maxPrice" type="number" min="0" step="1" defaultValue={maxPrice} placeholder="Không giới hạn" /></label>
           <label className="featured-filter"><input type="checkbox" name="featured" value="true" defaultChecked={featured} /> Nổi bật</label>
           <Button type="submit" variant="outline">Áp dụng</Button>
-        </form>}
+        </SearchForm>}
         {products.loading && <div className="product-grid" aria-label="Đang tải sản phẩm" aria-busy="true">
           {Array.from({ length: 4 }, (_, index) => <Skeleton className="product-skeleton" key={index} />)}
         </div>}
         {products.error && <div className="catalog-state" role="alert"><p>{products.error.message}</p>
           <Button variant="outline" onClick={products.retry}>Thử lại</Button></div>}
         {products.data?.items.length === 0 && <div className="catalog-state"><SearchX size={25} aria-hidden="true" />
-          <p>Chưa tìm thấy sản phẩm phù hợp.</p><a href="/san-pham">Xem tất cả sản phẩm</a></div>}
+          <p>Chưa tìm thấy sản phẩm phù hợp.</p><Link to="/san-pham">Xem tất cả sản phẩm</Link></div>}
         {products.data?.items.length > 0 && <div className="product-grid">
           {products.data.items.map((product) => <ProductCard key={product.id} product={product} />)}
         </div>}
         {catalogOnly && products.data?.pagination.totalPages > 1 && <nav className="pagination" aria-label="Phân trang sản phẩm">
-          {page > 1 && <a href={catalogLink({ page: page - 1 })}><ChevronLeft size={18} /> Trang trước</a>}
+          {page > 1 && <Link to={catalogLink({ page: page - 1 })}><ChevronLeft size={18} /> Trang trước</Link>}
           <span>Trang {page} / {products.data.pagination.totalPages}</span>
-          {products.data.pagination.hasNext && <a href={catalogLink({ page: page + 1 })}>Trang sau <ChevronRight size={18} /></a>}
+          {products.data.pagination.hasNext && <Link to={catalogLink({ page: page + 1 })}>Trang sau <ChevronRight size={18} /></Link>}
         </nav>}
         {!catalogOnly && products.data?.items.length > 0 && <div className="home-catalog-more">
-          <Button asChild variant="outline"><a href="/san-pham">Xem toàn bộ sản phẩm <ArrowRight size={16} aria-hidden="true" /></a></Button>
+          <Button asChild variant="outline"><Link to="/san-pham">Xem toàn bộ sản phẩm <ArrowRight size={16} aria-hidden="true" /></Link></Button>
         </div>}
       </section>
 

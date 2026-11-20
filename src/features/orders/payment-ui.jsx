@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { CircleCheck, CircleX, Clock, QrCode } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { paymentLabel, price, statusLabel } from '@/lib/format'
@@ -45,6 +46,6 @@ export function PaymentOutcome({ code, payment, reported, cancelled }) {
   }
   return <PaymentCard title={title} tone={tone} code={code} payment={payment}>
     <p role="status">{message}</p>
-    <Button asChild><a href={'/don-hang/' + encodeURIComponent(code)}>Xem đơn hàng</a></Button>
+    <Button asChild><Link to={'/don-hang/' + encodeURIComponent(code)}>Xem đơn hàng</Link></Button>
   </PaymentCard>
 }

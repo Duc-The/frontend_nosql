@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { PaymentCard, PaymentOutcome } from './payment-ui'
@@ -49,7 +50,7 @@ export function PaymentResultPage({ request, code, cancelled }) {
 
   if (!code || result?.error) return <PaymentCard title="Chưa xem được kết quả" code={code}>
     {result?.error && <p role="alert">{result.error}</p>}
-    <Button asChild><a href="/don-hang">Xem đơn hàng</a></Button>
+    <Button asChild><Link to="/don-hang">Xem đơn hàng</Link></Button>
   </PaymentCard>
   if (!result) return <PaymentCard title="Đang kiểm tra giao dịch" code={code} />
   return <PaymentOutcome code={code} payment={result.payment} reported={result.reported} cancelled={cancelled} />

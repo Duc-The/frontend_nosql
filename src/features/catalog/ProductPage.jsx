@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { ArrowRight, ChevronRight, Leaf, MapPin, Minus, Plus, ShoppingBag, Thermometer } from 'lucide-react'
 import { siteUrl, useSeo } from '@/hooks/use-seo'
@@ -34,9 +35,9 @@ export function ProductPage({ slug }) {
   return <StoreLayout cartCount={cartCount}>
     <section className="store-shell product-page">
       <nav aria-label="Đường dẫn" className="product-breadcrumb">
-        <a href="/">Trang chủ</a><ChevronRight size={14} aria-hidden="true" />
-        <a href="/san-pham">Sản phẩm</a><ChevronRight size={14} aria-hidden="true" />
-        {category && <><a href={categoryLink(category.slug)}>{category.name}</a><ChevronRight size={14} aria-hidden="true" /></>}
+        <Link to="/">Trang chủ</Link><ChevronRight size={14} aria-hidden="true" />
+        <Link to="/san-pham">Sản phẩm</Link><ChevronRight size={14} aria-hidden="true" />
+        {category && <><Link to={categoryLink(category.slug)}>{category.name}</Link><ChevronRight size={14} aria-hidden="true" /></>}
         <span aria-current="page">{product.data?.name || 'Chi tiết sản phẩm'}</span>
       </nav>
       {product.loading && <div className="product-editorial" role="status">
@@ -45,7 +46,7 @@ export function ProductPage({ slug }) {
       {product.error && <div className="catalog-state" role="alert">
         <p>{product.error.status === 404 ? 'Sản phẩm này hiện không có trong cửa hàng.' : product.error.message}</p>
         {product.error.status !== 404 && <Button variant="outline" onClick={product.retry}>Thử lại</Button>}
-        <a href="/san-pham">Xem sản phẩm khác</a>
+        <Link to="/san-pham">Xem sản phẩm khác</Link>
       </div>}
       {product.data && <ProductDetails key={product.data.id} product={product.data} onCart={setCartCount} />}
       {product.data && <ProductReviews key={slug} slug={slug} />}
@@ -123,11 +124,11 @@ function ProductDetails({ product, onCart }) {
           </div>
           {canShop ? <Button type="submit" disabled={pending}><ShoppingBag size={19} aria-hidden="true" />
             {pending ? 'Đang thêm…' : 'Thêm vào giỏ'}</Button>
-            : !session ? <Button asChild><a href={login}><ShoppingBag size={19} aria-hidden="true" />Đăng nhập để mua</a></Button>
+            : !session ? <Button asChild><Link to={login}><ShoppingBag size={19} aria-hidden="true" />Đăng nhập để mua</Link></Button>
               : <p className="product-origin">Đăng nhập bằng tài khoản khách hàng để mua sản phẩm.</p>}
         </form> : <p className="product-origin">Sản phẩm chưa có quy cách mở bán.</p>}
         {feedback && <div className={feedback.error ? 'page-error' : 'page-message'} role={feedback.error ? 'alert' : 'status'}>
-          {feedback.text} {!feedback.error && <a href="/gio-hang" className="page-link">Xem giỏ hàng</a>}
+          {feedback.text} {!feedback.error && <Link to="/gio-hang" className="page-link">Xem giỏ hàng</Link>}
         </div>}
       </div>
     </div>
@@ -166,7 +167,7 @@ function RelatedProducts({ category, productId }) {
 
   return <section className="product-related" aria-labelledby="related-title">
     <header><h2 id="related-title">Cùng danh mục</h2>
-      <a href={categoryLink(category.slug)}>Xem {category.name.toLowerCase()} <ArrowRight size={17} aria-hidden="true" /></a></header>
+      <Link to={categoryLink(category.slug)}>Xem {category.name.toLowerCase()} <ArrowRight size={17} aria-hidden="true" /></Link></header>
     <div className="product-grid">{items.map((item) => <ProductCard key={item.id} product={item} />)}</div>
   </section>
 }

@@ -1,3 +1,4 @@
+import { useNavigate, Link } from 'react-router-dom'
 import { CreditCard, MapPin, ReceiptText, ShoppingBag, Ticket } from 'lucide-react'
 import { CustomerEmpty, CustomerTitle, PanelTitle } from '@/features/account/customer-ui'
 import { useRef, useState } from 'react'
@@ -17,6 +18,7 @@ function attemptKey(token) {
 }
 
 export function CheckoutPage({ request, session }) {
+  const navigate = useNavigate()
   const cart = useResource(request, '/cart')
   const addresses = useResource(request, '/customers/me/addresses')
   const action = useAction()
@@ -61,7 +63,7 @@ export function CheckoutPage({ request, session }) {
       }
       sessionStorage.removeItem(storageKey)
       const route = payload.paymentMethod === 'COD' ? 'xac-nhan' : 'giao-dich'
-      location.assign('/thanh-toan/' + route + '/' + encodeURIComponent(order.order.orderCode))
+      navigate('/thanh-toan/' + route + '/' + encodeURIComponent(order.order.orderCode))
     })
     placing.current = false
   }
@@ -82,7 +84,7 @@ export function CheckoutPage({ request, session }) {
             })) })]} values={{ addressId: data.addressId || rows.find((row) => row.defaultAddress)?.id }}
             label="Tiếp tục đến thanh toán" busy={action.busy} submit={(body) => updateCart('/delivery-address', 'PUT', body, () => setStep('payment'))} />
             : <p>Bạn chưa có địa chỉ giao hàng.</p>}</DataState>
-          <a href="/tai-khoan/dia-chi" className="customer-text-link">Quản lý địa chỉ</a>
+          <Link to="/tai-khoan/dia-chi" className="customer-text-link">Quản lý địa chỉ</Link>
         </section> : <>
         <section className="page-box">
           <div className="customer-card-top"><PanelTitle title="Phương thức thanh toán" icon={CreditCard} />
@@ -134,7 +136,7 @@ export function CheckoutPage({ request, session }) {
         {step === 'payment' && !data.canCheckout && <small>Kiểm tra địa chỉ, mã giảm giá và giỏ hàng trước khi đặt.</small>}
       </section>
     </div> : <CustomerEmpty icon={ShoppingBag} title="Giỏ hàng đang trống">
-      <Button asChild><a href="/san-pham">Tiếp tục mua sắm</a></Button>
+      <Button asChild><Link to="/san-pham">Tiếp tục mua sắm</Link></Button>
     </CustomerEmpty>}</DataState>}
   </>
 }

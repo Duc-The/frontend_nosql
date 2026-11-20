@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, CreditCard, Package } from 'lucide-react'
 import { CustomerEmpty, CustomerSections, CustomerTitle, PanelTitle } from '@/features/account/customer-ui'
 import { OrderTimeline } from './OrderTimeline'
@@ -19,11 +20,11 @@ export function OrdersPage({ request }) {
             <span className="customer-badge" data-status={row.status}>{statusLabel(row.status)}</span>
           </div>
           <div className="customer-order-footer"><div><strong>{price(row.totalAmount)}</strong><p>{statusLabel(row.paymentStatus)}</p></div>
-            <a className="customer-text-link" href={'/don-hang/' + encodeURIComponent(row.orderCode)}>Xem chi tiết <ArrowRight size={16} /></a>
+            <Link className="customer-text-link" to={'/don-hang/' + encodeURIComponent(row.orderCode)}>Xem chi tiết <ArrowRight size={16} /></Link>
           </div>
         </article>)}
       </div> : <CustomerEmpty icon={Package} title="Bạn chưa có đơn hàng">
-        <Button asChild><a href="/san-pham">Khám phá sản phẩm</a></Button>
+        <Button asChild><Link to="/san-pham">Khám phá sản phẩm</Link></Button>
       </CustomerEmpty>}
       <Pager pagination={data.pagination} setPage={setPage} />
     </>}</DataState>
@@ -37,7 +38,7 @@ export function OrderPage({ request, code }) {
   const action = useAction()
   return <>
     <CustomerTitle title="Chi tiết đơn hàng" description={code}>
-      <a className="customer-text-link" href="/don-hang"><ArrowLeft size={16} aria-hidden="true" /> Tất cả đơn hàng</a>
+      <Link className="customer-text-link" to="/don-hang"><ArrowLeft size={16} aria-hidden="true" /> Tất cả đơn hàng</Link>
     </CustomerTitle>
     <ActionMessage action={action} />
     <DataState resource={order}>{(data) => <>
@@ -69,9 +70,9 @@ function OrderPayment({ request, code }) {
       <p>{paymentLabel(data.method)} · {statusLabel(data.status)} · {price(data.amount)}</p>
       {data.paidAt && <p>Đã thu lúc {dateTime(data.paidAt)}</p>}
       {data.method !== 'COD' && data.status === 'PENDING' && (!data.expiresAt || Date.parse(data.expiresAt) > Date.now())
-        && <Button asChild className="justify-self-start"><a href={'/thanh-toan/giao-dich/' + encodeURIComponent(code)}>
+        && <Button asChild className="justify-self-start"><Link to={'/thanh-toan/giao-dich/' + encodeURIComponent(code)}>
           {data.method === 'VIETQR' ? 'Hiện mã VietQR' : 'Thanh toán qua VNPAY'}
-        </a></Button>}
+        </Link></Button>}
     </>}</DataState>
   </section>
 }
@@ -87,8 +88,8 @@ export function OrderDetails({ data, section }) {
       {data.note && <p>Ghi chú: {data.note}</p>}
       {data.cancellationReason && <p>Lý do hủy: {data.cancellationReason}</p>}
       <Grid items={data.items} rowKey={(row) => row.variantId} columns={[column('Sản phẩm', (row) => <span className="order-review-item">{row.productName}
-        {canReview && row.productId && <a className="customer-text-link"
-          href={'/don-hang/' + encodeURIComponent(data.order.orderCode) + '/danh-gia/' + encodeURIComponent(row.productId)}>Đánh giá sản phẩm</a>}
+        {canReview && row.productId && <Link className="customer-text-link"
+          to={'/don-hang/' + encodeURIComponent(data.order.orderCode) + '/danh-gia/' + encodeURIComponent(row.productId)}>Đánh giá sản phẩm</Link>}
       </span>),
         column('SKU', 'sku'), column('Số lượng', 'quantity'), column('Thành tiền', (row) => price(row.lineTotal))]} />
       <dl className="order-totals"><dt>Tiền hàng</dt><dd>{price(data.subtotalAmount)}</dd>

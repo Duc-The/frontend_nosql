@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { ArrowUpRight, Boxes, ChartNoAxesCombined, ChevronDown, LogOut, Menu, ShoppingBag, Sprout, Tags, Users, X } from 'lucide-react'
 import './operations.css'
@@ -19,15 +20,15 @@ export function OperationsLayout({ children, links, activeSlug, roles, onSignOut
 
   return <div className="ops-layout">
     <aside id="operations-sidebar" className="ops-sidebar" data-mobile-open={mobileOpen}>
-      <a href="/van-hanh" className="ops-brand">
+      <Link to="/van-hanh" className="ops-brand">
         <span><Sprout size={23} aria-hidden="true" /></span>
         <div><strong>Mùa Xanh</strong><small>Vận hành cửa hàng</small></div>
-      </a>
+      </Link>
       <nav className="ops-navigation" aria-label="Điều hướng vận hành">
-        {links.some(([slug]) => slug === 'bao-cao') && <a className="ops-nav-root" href={route('bao-cao')}
+        {links.some(([slug]) => slug === 'bao-cao') && <Link className="ops-nav-root" to={route('bao-cao')}
           aria-current={activeSlug === 'bao-cao' ? 'page' : undefined}>
           <ChartNoAxesCombined size={19} aria-hidden="true" /> Tổng quan
-        </a>}
+        </Link>}
         {groups.map(({ title, icon, slugs }) => {
           const items = slugs.map((slug) => links.find(([key]) => key === slug)).filter(Boolean)
           if (!items.length) return null
@@ -35,7 +36,7 @@ export function OperationsLayout({ children, links, activeSlug, roles, onSignOut
           return <details key={title} open={items.some(([slug]) => slug === activeSlug)}>
             <summary><Icon size={19} aria-hidden="true" /><span>{title}</span><ChevronDown size={15} aria-hidden="true" /></summary>
             <ul>{items.map(([slug, label]) => <li key={slug}>
-              <a href={route(slug)} aria-current={activeSlug === slug ? 'page' : undefined}>{label}</a>
+              <Link to={route(slug)} aria-current={activeSlug === slug ? 'page' : undefined}>{label}</Link>
             </li>)}</ul>
           </details>
         })}
@@ -53,7 +54,7 @@ export function OperationsLayout({ children, links, activeSlug, roles, onSignOut
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
         <p><span>Vận hành</span><span aria-hidden="true">/</span><strong>{current?.[1] || 'Tài khoản'}</strong></p>
-        <a href="/">Xem cửa hàng <ArrowUpRight size={16} aria-hidden="true" /></a>
+        <Link to="/">Xem cửa hàng <ArrowUpRight size={16} aria-hidden="true" /></Link>
       </header>
       <main className="workspace-main ops-main">{children}</main>
     </div>

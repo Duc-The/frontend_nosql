@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ArrowRight, Leaf, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ProductPhoto } from '@/features/catalog/ProductPanel'
@@ -33,9 +34,9 @@ function CartLine({ item, busy, onChange }) {
   const image = <ProductPhoto product={{ name, images: item.imageUrl ? [{ url: item.imageUrl }] : [] }} className="cart-thumbnail" />
 
   return <li className="cart-item">
-    {href ? <a href={href} className="cart-image-link" aria-label={name}>{image}</a> : image}
+    {href ? <Link to={href} className="cart-image-link" aria-label={name}>{image}</Link> : image}
     <div className="cart-item-info">
-      <h3>{href ? <a href={href}>{name}</a> : name}</h3>
+      <h3>{href ? <Link to={href}>{name}</Link> : name}</h3>
       <p>{[item.variantName, item.unitPrice != null ? price(item.unitPrice) + ' / gói' : null].filter(Boolean).join(' · ')}</p>
       {!item.available && <p className="cart-item-warning">{stock > 0 ? `Chỉ còn ${stock} sản phẩm` : 'Hiện không có hàng'}</p>}
       <div className="cart-item-actions">
@@ -68,7 +69,7 @@ function CartSummary({ cart, busy }) {
     </dl>
     {blocked && <p className="cart-item-warning" role="status">Điều chỉnh hoặc xóa sản phẩm thiếu hàng để tiếp tục.</p>}
     {busy || blocked ? <Button disabled>Tiếp tục thanh toán <ArrowRight size={18} aria-hidden="true" /></Button>
-      : <Button asChild><a href="/thanh-toan">Tiếp tục thanh toán <ArrowRight size={18} aria-hidden="true" /></a></Button>}
+      : <Button asChild><Link to="/thanh-toan">Tiếp tục thanh toán <ArrowRight size={18} aria-hidden="true" /></Link></Button>}
   </section>
 }
 
@@ -76,6 +77,6 @@ function CartEmpty({ title, description, href, action }) {
   return <div className="cart-card cart-empty">
     <span className="cart-empty-icon"><Leaf size={27} aria-hidden="true" /></span>
     <h2>{title}</h2><p>{description}</p>
-    <Button asChild><a href={href}>{action}<ArrowRight size={16} aria-hidden="true" /></a></Button>
+    <Button asChild><Link to={href}>{action}<ArrowRight size={16} aria-hidden="true" /></Link></Button>
   </div>
 }

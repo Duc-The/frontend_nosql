@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ArrowUpRight, LogOut, MapPin, Package, Ticket, UserRound } from 'lucide-react'
 import { StoreLayout } from './StoreLayout'
 import './customer.css'
@@ -17,13 +18,13 @@ export function CustomerLayout({ links, pathname, onSignOut, children }) {
           {links.map(([href, label]) => {
             const Icon = icons[href]
             const current = href === pathname || (href === '/don-hang' && pathname.startsWith('/don-hang/'))
-            return <a key={href} href={href} aria-current={current ? (href === pathname ? 'page' : 'location') : undefined}>
+            return <Link key={href} to={href} aria-current={current ? (href === pathname ? 'page' : 'location') : undefined}>
               <Icon size={19} aria-hidden="true" />{label}
-            </a>
+            </Link>
           })}
         </nav>
         <div className="customer-sidebar-actions">
-          <a href="/san-pham">Xem cửa hàng <ArrowUpRight size={16} aria-hidden="true" /></a>
+          <Link to="/san-pham">Xem cửa hàng <ArrowUpRight size={16} aria-hidden="true" /></Link>
           <button type="button" onClick={onSignOut}>Đăng xuất <LogOut size={16} aria-hidden="true" /></button>
         </div>
       </aside>

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ActionMessage, DataState, Form, Grid, PageTitle, Pager, choices, column, field, useAction, useResource } from '@/components/page-kit'
@@ -31,7 +32,7 @@ export function InventoryPage({ request }) {
     : [column('Mã lô', 'batchCode'), column('SKU', 'sku'), column('Hạn dùng', 'expiryDate'),
       column('Tồn thực tế', 'quantityOnHand'), column('Đang giữ', 'quantityReserved'), column('Bán được', 'quantityAvailable'),
       column('Cảnh báo hạn', (row) => statusLabel(row.expiry)), statusColumn,
-      column('Thao tác', (row) => <a className="page-link" href={'/van-hanh/ton-kho/' + encodeURIComponent(row.id)}>Xem chi tiết</a>)]
+      column('Thao tác', (row) => <Link className="page-link" to={'/van-hanh/ton-kho/' + encodeURIComponent(row.id)}>Xem chi tiết</Link>)]
   return <>
     <PageTitle title="Tồn kho và hạn dùng" />
     <div className="page-actions">{[['stock', 'Theo SKU'], ['batches', 'Theo lô']].map(([key, label]) =>
@@ -54,7 +55,7 @@ export function InventoryBatchPage({ request, id }) {
   const resource = useResource(request, path)
   const action = useAction()
   return <>
-    <PageTitle title="Chi tiết lô hàng"><a className="page-link" href="/van-hanh/ton-kho?muc=lo">Về danh sách lô</a></PageTitle>
+    <PageTitle title="Chi tiết lô hàng"><Link className="page-link" to="/van-hanh/ton-kho?muc=lo">Về danh sách lô</Link></PageTitle>
     <ActionMessage action={action} />
     <DataState resource={resource}>{(batch) => <>
       <section className="page-box">
@@ -119,7 +120,7 @@ export function IssuePage({ request }) {
   return <><PageTitle title="Xuất kho theo đơn" />
     <section className="page-box"><h2>Đơn chờ xuất kho</h2><DataState resource={queue}>{(data) => <>
       <Grid items={data.items} rowKey={(row) => row.orderCode} columns={[column('Mã đơn', (row) =>
-        <a className="page-link" href={'/van-hanh/xuat-kho/' + encodeURIComponent(row.orderCode)}>{row.orderCode}</a>),
+        <Link className="page-link" to={'/van-hanh/xuat-kho/' + encodeURIComponent(row.orderCode)}>{row.orderCode}</Link>),
       column('Ngày đặt', (row) => dateTime(row.orderedAt)), statusColumn, column('Hạn giữ', (row) => dateTime(row.stockReservedUntil))]} />
       <Pager pagination={data.pagination} setPage={setPage} />
     </>}</DataState></section>
@@ -130,14 +131,14 @@ export function IssueDetailPage({ request, code }) {
   const detailPath = queuePath + '/' + encodeURIComponent(code)
   const detail = useResource(request, detailPath)
   const action = useAction()
-  return <><PageTitle title="Chi tiết xuất kho"><a className="page-link" href="/van-hanh/xuat-kho">Về đơn chờ xuất</a></PageTitle>
+  return <><PageTitle title="Chi tiết xuất kho"><Link className="page-link" to="/van-hanh/xuat-kho">Về đơn chờ xuất</Link></PageTitle>
     <ActionMessage action={action} />
     <DataState resource={detail}>{(data) => <section className="page-box">
       <div className="ops-report-heading"><h2>{code}</h2><span className="ops-chip">{statusLabel(data.order.status)}</span></div>
       {data.stockIssuedAt && <p>Đã xuất kho lúc {dateTime(data.stockIssuedAt)}</p>}
       <Grid items={data.allocations} rowKey={(row) => row.orderDetailId + ':' + row.batchId}
         columns={[column('SKU', 'sku'), column('Mã lô', (row) => row.batchId ?
-          <a href={'/van-hanh/ton-kho/' + encodeURIComponent(row.batchId)} className="page-link">{row.batchCode}</a> : row.batchCode),
+          <Link to={'/van-hanh/ton-kho/' + encodeURIComponent(row.batchId)} className="page-link">{row.batchCode}</Link> : row.batchCode),
           column('Hạn dùng', 'expiryDate'), column('Số lượng', 'quantity'), statusColumn]} />
       {data.order.status === 'PACKING' && <Button className="justify-self-start" disabled={action.busy} onClick={() => {
         if (window.confirm('Xác nhận xuất kho đơn này?')) action.run(async () => {

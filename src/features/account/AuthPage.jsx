@@ -1,3 +1,4 @@
+import { useNavigate, Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { AccountPanel } from './AccountPanel'
@@ -5,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp'
 import { ActionMessage, Form, PageTitle, field, useAction } from '@/components/page-kit'
 import { api } from '@/lib/api'
+import { postLoginPath } from '@/lib/route-access'
 
 const emailField = field('email', 'Email', { type: 'email', required: true, autoComplete: 'email' })
 const passwordField = field('password', 'Mật khẩu', { type: 'password', required: true, minLength: 8, autoComplete: 'new-password' })
@@ -12,6 +14,7 @@ const titles = { login: 'Đăng nhập', register: 'Tạo tài khoản', forgot:
 const send = (path, body) => api('/auth' + path, { method: 'POST', body })
 
 export function AuthPage({ mode, session, save }) {
+  const navigate = useNavigate()
   const [step, setStep] = useState('form')
   const [email, setEmail] = useState('')
   const [otp, setOtp] = useState('')
@@ -23,9 +26,7 @@ export function AuthPage({ mode, session, save }) {
   function login(next) {
     save(next)
     const target = new URLSearchParams(location.search).get('next')
-    const paymentTarget = target && /^\/payment\/(?:result|cancel)(?:\?[^#]*)?$/.test(target)
-    const allowed = paymentTarget || target && /^\/(?:tai-khoan|don-hang|thanh-toan|van-hanh|san-pham|gio-hang)(?:\/[^?#]*)?$/.test(target)
-    location.assign(allowed ? target : next.roles?.includes('CUSTOMER') ? '/' : '/van-hanh')
+    navigate(postLoginPath(next, target), { replace: true })
   }
   if (mode === 'login') return <>
     <PageTitle title={titles.login} />
@@ -93,13 +94,13 @@ export function AuthPage({ mode, session, save }) {
         })} />}
       {step === 'done' ? <div className="grid gap-3">
         <p role="status" className="page-message">{registrationOtp ? 'Tài khoản đã được xác minh.' : 'Đã đặt lại mật khẩu.'}</p>
-        <Button asChild><a href="/dang-nhap">Đăng nhập <ArrowRight size={16} aria-hidden="true" /></a></Button>
+        <Button asChild><Link to="/dang-nhap">Đăng nhập <ArrowRight size={16} aria-hidden="true" /></Link></Button>
       </div> : <nav aria-label="Tùy chọn tài khoản" className="auth-links">
         <div className="auth-link-row">
           {register && <span>Đã có tài khoản?</span>}
-          <a className="auth-link" href="/dang-nhap">{register ? 'Đăng nhập' : 'Về trang đăng nhập'} <ArrowRight size={16} aria-hidden="true" /></a>
+          <Link className="auth-link" to="/dang-nhap">{register ? 'Đăng nhập' : 'Về trang đăng nhập'} <ArrowRight size={16} aria-hidden="true" /></Link>
         </div>
-        {register && step === 'form' && <a className="auth-link" href="/xac-minh-tai-khoan">Xác minh tài khoản</a>}
+        {register && step === 'form' && <Link className="auth-link" to="/xac-minh-tai-khoan">Xác minh tài khoản</Link>}
       </nav>}
     </section>
   </>

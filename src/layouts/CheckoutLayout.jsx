@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ArrowLeft, Sprout } from 'lucide-react'
 import './customer.css'
 
@@ -8,10 +9,10 @@ export function CheckoutLayout({ stage, children }) {
   return <div className="checkout-flow">
     <header className="checkout-flow-header">
       <div className="store-shell">
-        <a className="wordmark" href="/" aria-label="Mùa Xanh, trang chủ"><Sprout size={23} aria-hidden="true" /> Mùa Xanh.</a>
-        <a className="customer-text-link" href={reviewing ? '/gio-hang' : '/don-hang'}>
+        <Link className="wordmark" to="/" aria-label="Mùa Xanh, trang chủ"><Sprout size={23} aria-hidden="true" /> Mùa Xanh.</Link>
+        <Link className="customer-text-link" to={reviewing ? '/gio-hang' : '/don-hang'}>
           <ArrowLeft size={16} aria-hidden="true" />{reviewing ? 'Về giỏ hàng' : 'Xem đơn hàng'}
-        </a>
+        </Link>
       </div>
     </header>
     <main className="store-shell workspace-main customer-main checkout-flow-main">

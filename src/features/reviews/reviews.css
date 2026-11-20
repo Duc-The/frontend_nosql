@@ -53,3 +53,5 @@
 @media (max-width: 540px) {
   .review-summary { grid-template-columns: minmax(0, 1fr); }
 }
+
+.review-entry-note { max-width: 360px; color: var(--muted-ink); font-size: .85rem; line-height: 1.6; }

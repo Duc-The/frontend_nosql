@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ChevronRight, Leaf } from 'lucide-react'
 import { useState } from 'react'
 import { price } from '@/lib/format'
@@ -17,7 +18,7 @@ export function ProductCard({ product }) {
   const saleMatchesMinimum = sale && Number(product.salePrice) === Number(product.minPrice)
   const discount = sale ? Math.floor((1 - Number(product.salePrice) / Number(product.saleCompareAtPrice)) * 100 + 1e-9) : 0
   return <article className="product-card">
-    <a href={'/san-pham/' + encodeURIComponent(product.slug)} className="product-card-button">
+    <Link to={'/san-pham/' + encodeURIComponent(product.slug)} className="product-card-button">
       <div className="product-card-visual"><ProductPhoto product={product} className="product-photo" />
         {sale && <span className="product-sale-badge">{discount > 0 ? '−' + discount + '%' : 'Giảm giá'}</span>}
       </div>
@@ -31,6 +32,6 @@ export function ProductCard({ product }) {
         </div>
         {sale && !saleMatchesMinimum && <p className="product-sale-option">Quy cách giảm còn {price(product.salePrice)} <del>{price(product.saleCompareAtPrice)}</del></p>}
       </div>
-    </a>
+    </Link>
   </article>
 }

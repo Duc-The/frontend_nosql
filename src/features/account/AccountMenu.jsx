@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { createElement, useEffect, useId, useRef, useState } from 'react'
 import {
   Boxes, ClipboardList, LayoutDashboard, LogIn, LogOut, MapPin, ShieldCheck,
@@ -66,7 +67,7 @@ export function AccountMenu({ session, onSignOut }) {
     <nav id={menuId} className="account-menu-panel" aria-label="Tùy chọn tài khoản" hidden={!open}>
       <ul>
         {links.map(([href, label, Icon]) => <li key={href}>
-          <a href={href}>{createElement(Icon, { size: 17, 'aria-hidden': true })}{label}</a>
+          <Link to={href}>{createElement(Icon, { size: 17, 'aria-hidden': true })}{label}</Link>
         </li>)}
         {session && <li className="account-menu-signout">
           <button type="button" onClick={onSignOut}><LogOut size={17} aria-hidden="true" />Đăng xuất</button>

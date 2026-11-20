@@ -1,8 +1,17 @@
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+import 'dayjs/locale/vi'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.locale('vi')
+
 const vnd = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
 export const price = (value) => vnd.format(value)
 
-const dateFormat = new Intl.DateTimeFormat('vi-VN', { dateStyle: 'short', timeStyle: 'short', timeZone: 'Asia/Ho_Chi_Minh' })
-export const dateTime = (value) => value ? dateFormat.format(new Date(value)) : '—'
+export const dateTime = (value) => value && dayjs(value).isValid()
+  ? dayjs(value).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY HH:mm') : '—'
 
 const statuses = {
   PENDING: 'Đang chờ', CONFIRMED: 'Đã xác nhận', PACKING: 'Đang đóng gói', PACKED: 'Đã xuất kho',

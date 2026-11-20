@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { ArrowLeft, Camera, CheckCircle2, Film, Star, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -13,8 +14,8 @@ export function WriteReviewPage({ request, orderCode, productId }) {
   const path = '/orders/' + encodeURIComponent(orderCode) + '/reviews/' + encodeURIComponent(productId)
   const info = useResource(request, path)
   return <>
-    <CustomerTitle title="Viết đánh giá"><a className="customer-text-link" href={'/don-hang/' + encodeURIComponent(orderCode)}>
-      <ArrowLeft size={17} aria-hidden="true" /> Về đơn hàng</a></CustomerTitle>
+    <CustomerTitle title="Viết đánh giá"><Link className="customer-text-link" to={'/don-hang/' + encodeURIComponent(orderCode)}>
+      <ArrowLeft size={17} aria-hidden="true" /> Về đơn hàng</Link></CustomerTitle>
     <DataState resource={info}>{(data) => <ReviewForm request={request} path={path} orderCode={orderCode} info={data} />}</DataState>
   </>
 }
@@ -50,8 +51,8 @@ function ReviewForm({ request, path, orderCode, info }) {
   if (sent || info.alreadyReviewed) return <section className="page-box review-success">
     <CheckCircle2 size={34} aria-hidden="true" /><h2>{sent ? 'Đã gửi đánh giá' : 'Bạn đã đánh giá sản phẩm này'}</h2>
     <p>{info.productName}</p>
-    <Button asChild><a href={info.productSlug ? '/san-pham/' + encodeURIComponent(info.productSlug) + '#danh-gia'
-      : '/don-hang/' + encodeURIComponent(orderCode)}>{info.productSlug ? 'Xem đánh giá' : 'Về đơn hàng'}</a></Button>
+    <Button asChild><Link to={info.productSlug ? '/san-pham/' + encodeURIComponent(info.productSlug) + '#danh-gia'
+      : '/don-hang/' + encodeURIComponent(orderCode)}>{info.productSlug ? 'Xem đánh giá' : 'Về đơn hàng'}</Link></Button>
   </section>
 
   return <form className="page-box review-editor" onSubmit={(event) => {

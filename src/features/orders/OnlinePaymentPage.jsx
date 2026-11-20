@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import QRCode from 'qrcode'
 import { Button } from '@/components/ui/button'
@@ -58,7 +59,7 @@ export function OnlinePaymentPage({ request, code }) {
 
   return <PaymentCard title="Quét mã VietQR" tone="qr" code={code} payment={payment}>
     {payment.qrPayload ? <PaymentQr value={payment.qrPayload} /> : payment.paymentUrl && /^https:\/\//i.test(payment.paymentUrl)
-      ? <Button asChild><a href={payment.paymentUrl}>Mở mã VietQR trên payOS</a></Button>
+      ? <Button asChild><Link to={payment.paymentUrl}>Mở mã VietQR trên payOS</Link></Button>
       : <p role="alert">Mã QR chưa khả dụng.</p>}
     <p role="status">Kết quả sẽ tự cập nhật sau khi chuyển khoản.</p>
   </PaymentCard>

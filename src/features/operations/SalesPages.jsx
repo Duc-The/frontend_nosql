@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ActionMessage, DataState, Form, Grid, PageTitle, Pager, choices, column, field, useAction, useResource } from '@/components/page-kit'
@@ -19,7 +20,7 @@ export function SalesList({ request }) {
     }} />
     <section className="page-box"><DataState resource={orders}>{(data) => <>
       <Grid items={data.items} rowKey={(row) => row.orderCode} columns={[
-        column('Mã đơn', (row) => <a className="page-link" href={'/van-hanh/don-hang/' + encodeURIComponent(row.orderCode)}>{row.orderCode}</a>),
+        column('Mã đơn', (row) => <Link className="page-link" to={'/van-hanh/don-hang/' + encodeURIComponent(row.orderCode)}>{row.orderCode}</Link>),
         column('Ngày đặt', (row) => dateTime(row.orderedAt)), column('Trạng thái', (row) => statusLabel(row.status)),
         column('Phụ trách', 'assignedEmployeeName'), column('Tổng tiền', (row) => price(row.totalAmount)),
       ]} /><Pager pagination={data.pagination} setPage={setPage} />
@@ -38,7 +39,7 @@ export function SalesDetail({ request, session, code }) {
       await request(endpoint + suffix, { method, body }); order.reload()
     }, 'Đã cập nhật đơn.')
   }
-  return <><PageTitle title="Xử lý đơn hàng" /><a href="/van-hanh/don-hang" className="page-link">Quay lại danh sách</a>
+  return <><PageTitle title="Xử lý đơn hàng" /><Link to="/van-hanh/don-hang" className="page-link">Quay lại danh sách</Link>
     <ActionMessage action={action} />
     <DataState resource={order}>{(data) => {
       const summary = data.order.order

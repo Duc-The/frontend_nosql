@@ -1,9 +1,12 @@
+import { useNavigate, Link } from 'react-router-dom'
+import { SearchForm } from '@/components/SearchForm'
 import { ArrowUp, ArrowUpRight, Grid2X2, Search, ShoppingBag, Sprout } from 'lucide-react'
 import { AccountMenu } from '@/features/account/AccountMenu'
 import { useSession } from '@/features/account/use-session'
 import { useResource } from '@/components/page-kit'
 
 export function StoreLayout({ children, search, cartCount }) {
+  const navigate = useNavigate()
   const { session, request, save } = useSession()
   const isCustomer = session?.roles?.includes('CUSTOMER')
   const cart = useResource(request, isCustomer && cartCount == null ? '/cart' : null)
@@ -16,29 +19,29 @@ export function StoreLayout({ children, search, cartCount }) {
       <a className="skip-link" href="#noi-dung">Đến nội dung</a>
       <header className="store-header">
         <div className="store-shell header-inner">
-          <a className="wordmark" href="/" aria-label="Mùa Xanh, trang chủ">
+          <Link className="wordmark" to="/" aria-label="Mùa Xanh, trang chủ">
             <span className="wordmark-icon"><Sprout size={22} aria-hidden="true" /></span>
             Mùa Xanh<span className="wordmark-dot">.</span>
-          </a>
-          <form action="/san-pham" className="header-search" role="search">
+          </Link>
+          <SearchForm action="/san-pham" className="header-search" role="search">
             <label htmlFor="search" className="sr-only">Tìm sản phẩm</label>
             <input id="search" type="search" name="q" defaultValue={search} placeholder="Tìm rau, trái cây, gạo…" maxLength={100} />
             <button type="submit" aria-label="Tìm kiếm"><Search size={19} aria-hidden="true" /></button>
-          </form>
+          </SearchForm>
           <div className="header-actions">
-            <AccountMenu session={session} onSignOut={() => { save(null); location.assign('/') }} />
-            <a className="icon-button bag-button" href="/gio-hang" aria-label={`Giỏ hàng, ${count} sản phẩm`}>
+            <AccountMenu session={session} onSignOut={() => { save(null); navigate('/') }} />
+            <Link className="icon-button bag-button" to="/gio-hang" aria-label={`Giỏ hàng, ${count} sản phẩm`}>
               <ShoppingBag size={20} aria-hidden="true" />
               <span className="bag-label" aria-hidden="true">Giỏ hàng</span>
               <span className="bag-count" aria-hidden="true">{count}</span>
-            </a>
+            </Link>
           </div>
         </div>
         <div className="header-navigation">
           <nav className="store-shell main-nav" aria-label="Điều hướng chính">
-            <a href="/" aria-current={pathname === '/' ? 'page' : undefined}>Trang chủ</a>
-            <a href="/san-pham" aria-current={inCatalog ? (pathname === '/san-pham' ? 'page' : 'location') : undefined}>Cửa hàng</a>
-            <a href="/san-pham#danh-muc"><Grid2X2 size={16} aria-hidden="true" /> Danh mục</a>
+            <Link to="/" aria-current={pathname === '/' ? 'page' : undefined}>Trang chủ</Link>
+            <Link to="/san-pham" aria-current={inCatalog ? (pathname === '/san-pham' ? 'page' : 'location') : undefined}>Cửa hàng</Link>
+            <Link to="/san-pham#danh-muc"><Grid2X2 size={16} aria-hidden="true" /> Danh mục</Link>
           </nav>
         </div>
       </header>
@@ -47,24 +50,24 @@ export function StoreLayout({ children, search, cartCount }) {
         <div className="store-shell">
           <div className="footer-inner">
             <div className="footer-brand">
-              <a href="/" className="wordmark" aria-label="Mùa Xanh, trang chủ"><Sprout size={24} aria-hidden="true" /> Mùa Xanh.</a>
+              <Link to="/" className="wordmark" aria-label="Mùa Xanh, trang chủ"><Sprout size={24} aria-hidden="true" /> Mùa Xanh.</Link>
               <p>Thực phẩm hữu cơ cho bữa ăn hằng ngày.</p>
-              <a href="/san-pham" className="footer-shop">Khám phá cửa hàng <ArrowUpRight size={16} aria-hidden="true" /></a>
+              <Link to="/san-pham" className="footer-shop">Khám phá cửa hàng <ArrowUpRight size={16} aria-hidden="true" /></Link>
             </div>
             <nav aria-label="Mua sắm" className="footer-nav">
               <h2>Mua sắm</h2>
               <ul>
-                <li><a href="/san-pham">Tất cả sản phẩm</a></li>
-                <li><a href="/san-pham#danh-muc">Danh mục</a></li>
-                <li><a href="/gio-hang">Giỏ hàng</a></li>
+                <li><Link to="/san-pham">Tất cả sản phẩm</Link></li>
+                <li><Link to="/san-pham#danh-muc">Danh mục</Link></li>
+                <li><Link to="/gio-hang">Giỏ hàng</Link></li>
               </ul>
             </nav>
             <nav aria-label="Tài khoản" className="footer-nav">
               <h2>Tài khoản</h2>
               <ul>
-                <li><a href={account}>{isCustomer ? 'Hồ sơ của tôi' : session ? 'Trang vận hành' : 'Đăng nhập'}</a></li>
-                <li><a href="/don-hang">Theo dõi đơn hàng</a></li>
-                <li><a href="/tai-khoan/uu-dai">Điểm và voucher</a></li>
+                <li><Link to={account}>{isCustomer ? 'Hồ sơ của tôi' : session ? 'Trang vận hành' : 'Đăng nhập'}</Link></li>
+                <li><Link to="/don-hang">Theo dõi đơn hàng</Link></li>
+                <li><Link to="/tai-khoan/uu-dai">Điểm và voucher</Link></li>
               </ul>
             </nav>
             <div className="footer-payment">

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ArrowRight, CircleCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { DataState, useResource } from '@/components/page-kit'
@@ -19,10 +20,10 @@ export function OrderConfirmation({ request, code }) {
         <dt>Thanh toán</dt><dd>{statusLabel(details.paymentStatus)}</dd>
       </dl>
       <div className="page-actions">
-        <Button asChild><a href={needsPayment ? '/thanh-toan/giao-dich/' + encodeURIComponent(details.orderCode) : orderUrl}>
+        <Button asChild><Link to={needsPayment ? '/thanh-toan/giao-dich/' + encodeURIComponent(details.orderCode) : orderUrl}>
           {needsPayment ? 'Tiếp tục thanh toán' : 'Xem chi tiết đơn'} <ArrowRight size={17} aria-hidden="true" />
-        </a></Button>
-        <Button asChild variant="outline"><a href="/san-pham">Tiếp tục mua sắm</a></Button>
+        </Link></Button>
+        <Button asChild variant="outline"><Link to="/san-pham">Tiếp tục mua sắm</Link></Button>
       </div>
     </section>
   }}</DataState>

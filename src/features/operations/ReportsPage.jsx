@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { ArrowUpRight, CalendarDays, CircleCheck, ShoppingBag, Wallet } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -102,7 +103,7 @@ function Metric({ label, value, icon, tone, href, linkLabel }) {
   return <section className="report-metric" data-tone={tone}>
     <span className="report-metric-icon"><Icon size={21} aria-hidden="true" /></span>
     <h2>{label}</h2><strong>{value}</strong>
-    <a href={href}>{linkLabel} <ArrowUpRight size={15} aria-hidden="true" /></a>
+    <Link to={href}>{linkLabel} <ArrowUpRight size={15} aria-hidden="true" /></Link>
   </section>
 }
 

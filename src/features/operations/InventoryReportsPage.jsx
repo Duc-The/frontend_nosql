@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { AlertTriangle, Boxes, CalendarDays } from 'lucide-react'
 import { CustomerSections } from '@/features/account/customer-ui'
@@ -24,7 +25,7 @@ export function InventoryReportsPage({ request }) {
     column('Tình trạng', (row) => <span className="ops-stock-badge" data-warning={row.lowStock || undefined}>{row.lowStock ? 'Tồn thấp' : 'Đủ ngưỡng'}</span>),
   ] : [
     column('Mã lô / SKU', (row) => <span className="ops-product-cell">
-      <a href={batchLink(row.id)} className="page-link">{row.batchCode}</a><small>{row.sku}</small>
+      <Link to={batchLink(row.id)} className="page-link">{row.batchCode}</Link><small>{row.sku}</small>
     </span>),
     column('Hạn dùng', (row) => date(row.expiryDate)), column('Còn trong kho', amount('quantityOnHand')),
     column('Tình trạng', (row) => <span className="ops-stock-badge" data-warning>{statusLabel(row.expiry)}</span>),
